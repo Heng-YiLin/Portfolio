@@ -7,14 +7,23 @@ import ThreeScene from "./components/ThreeScene";
 
 export default function HomePage() {
   return (
-    <>
+    <main className="relative min-h-screen">
+      {/* Background 3d rendering */}
+      <div className="pointer-events-none fixed inset-0 -z-10">
       <ThreeScene />
-      <Hero />
-      <Projects />
-      <Skills />
-      <Experience />
-      <Contact />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
+      </div>
+      
+      
+      <div className="relative z-10">
+        <Hero />
+        <Projects />
+        <Skills />
+        <Experience />
+        <Contact />
+      </div>
+    
+      </main>
 
-    </>
   );
 }

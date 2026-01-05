@@ -4,8 +4,7 @@ export default function About() {
             <div className="max-w-4xl mx-auto px-4 py-12">
                 <h2 className="text-2xl font-semibold mb-4">About</h2>
                 <p className="text-gray-700 mb-3">
-                    I’m Henry, a software engineer based in Brisbane who enjoys turning messy real-world systems
-                    into clear, interactive tools.
+                    I’m Henry, a software engineer based in Brisbane who enjoys turning ideas into real projects.
                 </p>
                 <p className="text-gray-700 mb-3">
                     Recently, I built a causal loop diagram GUI for my honours thesis, plus fitness and social

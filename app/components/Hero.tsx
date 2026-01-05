@@ -4,10 +4,10 @@ export default function Hero() {
         <section id="hero" className="border-b">
             <div className="max-w-4xl mx-auto px-4 py-16">
                 <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-2">
-                    Software Engineer · Brisbane
+                    Graduate Software Engineer · Brisbane
                 </p>
                 <h1 className="text-4xl md:text-5xl font-semibold mb-4">
-                    Hi, I’m Henry. I build interactive tools and mobile apps that make complex systems intuitive.
+                I’m Henry, a software engineer based in Brisbane who enjoys turning ideas into real projects.
                 </h1>
                 <p className="text-gray-600 max-w-2xl mb-8">
                     Final-year Software Engineering (Hons) student at UQ. I’ve built a causal loop diagram GUI,

@@ -4,78 +4,96 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-
 export default function ThreeScene() {
-    const mountRef = useRef<HTMLDivElement | null>(null);
+  const mountRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    if (!mountRef.current) return;
 
-    useEffect(() => {
-        if (!mountRef.current) return;
+    const container = mountRef.current;
 
-        const width = mountRef.current.clientWidth;
-        const height = mountRef.current.clientHeight;
+    // Scene
+    const scene = new THREE.Scene();
 
-        // Scene
-        const scene = new THREE.Scene();
+    // Camera
+    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+    camera.position.set(0, 0.7, 2.5);
 
-        // Camera
-        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-        camera.position.z = 2;
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    container.appendChild(renderer.domElement);
 
-        // Renderer
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(width, height);
-        mountRef.current.appendChild(renderer.domElement);
+    // Simple demo object (replace with car)
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshNormalMaterial();
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
 
-        // Geometry
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshNormalMaterial();
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
+    // Lights
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    const directional = new THREE.DirectionalLight(0xffffff, 1.2);
+    directional.position.set(5, 5, 5);
+    scene.add(directional);
 
-        // Lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(5, 5, 5);
-        scene.add(directionalLight);
+    // OPTIONAL: load car
+    // const loader = new GLTFLoader();
+    // loader.load("/911.glb", (gltf) => {
+    //   const car = gltf.scene;
+    //   car.scale.set(0.5, 0.5, 0.5);
+    //   scene.add(car);
+    // });
 
-        const loader = new GLTFLoader();
-        loader.load(
-            "/911.glb",
-            (gltf) => {
-                const car = gltf.scene;
-                // Optional: Adjust scale or position if needed
-                car.scale.set(0.5, 0.5, 0.5);
-                scene.add(car);
-            },
-            undefined,
-            (error: unknown) => {
-                console.error("An error occurred loading the model:", error);
-            }
-        );
+    // Resize handler (critical)
+    const resize = () => {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
 
-        // Animation loop
-        const animate = () => {
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
 
-            renderer.render(scene, camera);
-            requestAnimationFrame(animate);
-        };
-        animate();
+    resize();
+    window.addEventListener("resize", resize);
 
-        // Cleanup
-        return () => {
-            renderer.dispose();
-            mountRef.current?.removeChild(renderer.domElement);
-        };
-    }, []);
+    let raf = 0;
+    const animate = () => {
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
 
-    return (
-        <div
-            ref={mountRef}
-            style={{ width: "100%", height: "300px", background: "#000" }}
-        />
-    );
+      renderer.render(scene, camera);
+      raf = requestAnimationFrame(animate);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+
+      renderer.dispose();
+      geometry.dispose();
+      material.dispose();
+
+      // Remove canvas
+      if (renderer.domElement.parentNode === container) {
+        container.removeChild(renderer.domElement);
+      }
+    };
+  }, []);
+
+  return (
+    <div
+      ref={mountRef}
+      style={{
+        position: "fixed",
+        inset: 0,
+        width: "100vw",
+        height: "100vh",
+        background: "#000",
+        zIndex: -10,
+      }}
+    />
+  );
 }
