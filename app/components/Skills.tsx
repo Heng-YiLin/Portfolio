@@ -1,6 +1,6 @@
 export default function Skills() {
     return (
-        <section id="skills" className="border-b">
+        <section id="skills" className="border-b min-h-screen">
             <div className="max-w-4xl mx-auto px-4 py-12">
                 <h2 className="text-2xl font-semibold mb-4">Skills</h2>
                 <div className="grid gap-4 md:grid-cols-2 text-sm text-gray-700">

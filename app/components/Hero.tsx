@@ -1,7 +1,7 @@
 
 export default function Hero() {
     return (
-        <section id="hero" className="border-b">
+        <section id="hero" className="border-b min-h-screen ">
             <div className="max-w-4xl mx-auto px-4 py-16">
                 <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-2">
                     Graduate Software Engineer · Brisbane
